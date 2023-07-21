@@ -5,9 +5,12 @@ function display_menu() {
   clear
   echo "This is a standalone App Connector Troubleshooting Script"
   echo "Created and managed by Anirudh"
-  
-  
+  echo
+  echo  
+  echo "-----------------------------------------------------------------------------------------------"
   echo "Main Menu"
+  echo "-----------------------------------------------------------------------------------------------"
+  echo
   echo "1. Show App Connector status"
   echo "2. Reprovision App Connector"
   echo "3. Export Journal Logs"
@@ -15,8 +18,11 @@ function display_menu() {
   echo "5. Start Packet Capture"
   echo "6. Capture and ZIP PCAP and Journal logs for sharing with Zscaler Support"
   echo "4. Exit"
+  echo "-----------------------------------------------------------------------------------------------"
   echo
   read -p "Enter your choice: " choice
+  echo 
+  echo "-----------------------------------------------------------------------------------------------"
   echo
 }
 
