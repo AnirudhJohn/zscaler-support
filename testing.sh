@@ -165,7 +165,7 @@ if [ -f "$output_file" ] && [ -f "$output_file2" ]; then
   # Zip the two files into the output zip archive
   zip "$output_zip" "$output_file" "$output_file2"
   echo "Files zipped successfully!!! Please share these with Zscaler Support for further analysis !!"
-  ehco "Exiting out of the script !!"
+  echo "Exiting out of the script !!"
   sleep 2
   exit
 else
@@ -177,6 +177,12 @@ fi
 }
 
 
+echo "This is a standalone App Connector Troubleshooting Script"
+echo "Created and managed by Anirudh"
+
+echo "Dependency packages: zip"
+
+yum install zip -y &>/dev/null
 
 # Main script
 while true; do
