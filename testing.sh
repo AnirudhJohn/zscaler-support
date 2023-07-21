@@ -9,37 +9,13 @@ function display_menu() {
   echo "3. Export Journal Logs"
   echo "4. Share Journal logs with Zscaler Support"
   echo "5. Start Packet Capture"
+  echo "6. Capture and ZIP PCAP and Journal logs for sharing with Zscaler Support"
   echo "4. Exit"
   echo
   read -p "Enter your choice: " choice
   echo
 }
 
-# Function for Task 5
-function task5() {
-    local default_interface="eth0"
-
-    read -p "Enter the host (leave empty for all hosts): " host
-    read -p "Enter the port (leave empty for all ports): " port
-    read -p "Enter the interface (default: $default_interface): " interface
-    interface=${interface:-$default_interface}
-
-    read -p "Enter the output file path with filename (default: /tmp/zscaler-<timestamp>.pcap): " output_file
-    output_file=${output_file:-"/tmp/zscaler-$(date +'%Y%m%d%H%M%S').pcap"}
-
-    # Build the tcpdump filter based on the user input
-    filter=""
-    if [[ -n "$host" ]]; then
-        filter+="host $host "
-    fi
-
-    if [[ -n "$port" ]]; then
-        filter+="port $port "
-    fi
-
-    # Run tcpdump with the generated filter and write to the specified output file
-    sudo tcpdump -i "$interface" $filter -w "$output_file"
-}
 
 # Function for Task 1
 function task1() {
@@ -114,11 +90,79 @@ fi
 
 # Function for Task 3
 function task3() {
-  echo "Running Task 3..."
+  echo "Extracting Journal for ZPA process..."
   # Add your task 3 command here
-  echo "Task 3 output"
+  output_file=${output_file:-"/tmp/journal-$(date +'%Y%m%d%H%M%S').log"}
+  journalctl -u zpa-connector > "$output_file"
   echo
 }
+
+# Function for Task 5
+function task5() {
+    local default_interface="eth0"
+
+    read -p "Enter the host (leave empty for all hosts): " host
+    read -p "Enter the port (leave empty for all ports): " port
+    read -p "Enter the interface (default: $default_interface): " interface
+    interface=${interface:-$default_interface}
+
+    read -p "Enter the output file path with filename (default: /tmp/zscaler-<timestamp>.pcap): " output_file
+    output_file=${output_file:-"/tmp/zscaler-pcap-$(date +'%Y%m%d%H%M%S').pcap"}
+
+    # Build the tcpdump filter based on the user input
+    filter=""
+    if [[ -n "$host" ]]; then
+        filter+="host $host "
+    fi
+
+    if [[ -n "$port" ]]; then
+        filter+="port $port "
+    fi
+
+    # Run tcpdump with the generated filter and write to the specified output file
+    sudo tcpdump -i "$interface" $filter -w "$output_file"
+}
+
+# Function for Task 6 
+
+function task6() {
+    echo "Starting the Pcap ..."
+    sleep 2
+        local default_interface="eth0"
+
+    read -p "Enter the host (leave empty for all hosts): " host
+    read -p "Enter the port (leave empty for all ports): " port
+    read -p "Enter the interface (default: $default_interface): " interface
+    interface=${interface:-$default_interface}
+
+    read -p "Enter the output file path with filename (default: /tmp/zscaler-<timestamp>.pcap): " output_file
+    output_file=${output_file:-"/tmp/zscaler-pcap-$(date +'%Y%m%d%H%M%S').pcap"}
+
+    # Build the tcpdump filter based on the user input
+    filter=""
+    if [[ -n "$host" ]]; then
+        filter+="host $host "
+    fi
+
+    if [[ -n "$port" ]]; then
+        filter+="port $port "
+    fi
+
+    # Run tcpdump with the generated filter and write to the specified output file
+    sudo tcpdump -i "$interface" $filter -w "$output_file"
+    
+
+  echo "Extracting Journal for ZPA process..."
+  # Add your task 3 command here
+  output_file=${output_file2:-"/tmp/journal-$(date +'%Y%m%d%H%M%S').log"}
+  journalctl -u zpa-connector > "$output_file2"
+  echo    
+    
+
+    
+}
+
+
 
 # Main script
 while true; do
