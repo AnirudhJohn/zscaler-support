@@ -90,11 +90,12 @@ fi
 
 # Function for Task 3
 function task3() {
-  echo "Extracting Journal for ZPA process..."
-  # Add your task 3 command here
-  output_file=${output_file:-"/tmp/journal-$(date +'%Y%m%d%H%M%S').log"}
-  journalctl -u zpa-connector > "$output_file"
-  echo
+    read -p "Enter --since parameter (leave empty for all logs): " since_param
+    #read -p "Enter the output file path with filename (default: /tmp/journal-<timestamp>.log): " output_file
+    output_file=${output_file:-"/tmp/journal-$(date +'%Y%m%d%H%M%S').log"}
+
+    # Run journalctl with the specified --since parameter and write to the output file
+    sudo journalctl -u zpa-connector ${since_param:+--since="$since_param"} > "$output_file"
 }
 
 # Function for Task 5
@@ -106,7 +107,7 @@ function task5() {
     read -p "Enter the interface (default: $default_interface): " interface
     interface=${interface:-$default_interface}
 
-    read -p "Enter the output file path with filename (default: /tmp/zscaler-<timestamp>.pcap): " output_file
+    #read -p "Enter the output file path with filename (default: /tmp/zscaler-<timestamp>.pcap): " output_file
     output_file=${output_file:-"/tmp/zscaler-pcap-$(date +'%Y%m%d%H%M%S').pcap"}
 
     # Build the tcpdump filter based on the user input
@@ -135,7 +136,7 @@ function task6() {
     read -p "Enter the interface (default: $default_interface): " interface
     interface=${interface:-$default_interface}
 
-    read -p "Enter the output file path with filename (default: /tmp/zscaler-<timestamp>.pcap): " output_file
+    #read -p "Enter the output file path with filename (default: /tmp/zscaler-<timestamp>.pcap): " output_file
     output_file=${output_file:-"/tmp/zscaler-pcap-$(date +'%Y%m%d%H%M%S').pcap"}
 
     # Build the tcpdump filter based on the user input
@@ -154,9 +155,22 @@ function task6() {
 
   echo "Extracting Journal for ZPA process..."
   # Add your task 3 command here
-  output_file=${output_file2:-"/tmp/journal-$(date +'%Y%m%d%H%M%S').log"}
+  output_file2=${output_file2:-"/tmp/journal-$(date +'%Y%m%d%H%M%S').log"}
   journalctl -u zpa-connector > "$output_file2"
   echo    
+
+output_zip="App_Connector_Journal_and_pcap-$(date +'%Y%m%d%H%M%S').zip"
+  # Check if both files exist before zipping
+if [ -f "$output_file" ] && [ -f "$output_file2" ]; then
+  # Zip the two files into the output zip archive
+  zip "$output_zip" "$output_file" "$output_file2"
+  echo "Files zipped successfully!!! Please share these with Zscaler Support for further analysis !!"
+  ehco "Exiting out of the script !!"
+  sleep 2
+  exit
+else
+  echo "One or both files do not exist. Please check the file paths."
+fi
     
 
     
