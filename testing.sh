@@ -142,8 +142,13 @@ function task6() {
         local default_interface="eth0"
 
     read -p "Enter the host (leave empty for all hosts): " host
+    echo
     read -p "Enter the port (leave empty for all ports): " port
+    echo
     read -p "Enter the interface (default: $default_interface): " interface
+    echo
+    echo "Please replicate the issue. Once done you can stop the capture with Ctrl^c "
+    echo
     interface=${interface:-$default_interface}
 
     #read -p "Enter the output file path with filename (default: /tmp/zscaler-<timestamp>.pcap): " output_file
@@ -162,8 +167,12 @@ function task6() {
     # Run tcpdump with the generated filter and write to the specified output file
     sudo tcpdump -i "$interface" $filter -w "$output_file"
     
+    echo 
+    echo "Pcap terminated !!"
+    echo 
+    echo "-----------------------------------------------------------------------------------------------"
 
-  echo "Extracting Journal for ZPA process..."
+   echo "Extracting Journal for ZPA process..."
   # Add your task 3 command here
   output_file2=${output_file2:-"/tmp/journal-$(date +'%Y%m%d%H%M%S').log"}
   journalctl -u zpa-connector > "$output_file2"
@@ -174,11 +183,14 @@ output_zip="App_Connector_Journal_and_pcap-$(date +'%Y%m%d%H%M%S').zip"
 if [ -f "$output_file" ] && [ -f "$output_file2" ]; then
   # Zip the two files into the output zip archive
   zip "$output_zip" "$output_file" "$output_file2"
+  echo
   echo "Files zipped successfully!!! Please share these with Zscaler Support for further analysis !!"
+  echo
   echo "Exiting out of the script !!"
   sleep 2
   exit
 else
+  echo
   echo "One or both files do not exist. Please check the file paths."
 fi
     
