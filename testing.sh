@@ -178,7 +178,7 @@ function task6() {
   journalctl -u zpa-connector > "$output_file2"
   echo    
 
-output_zip="App_Connector_Journal_and_pcap-$(date +'%Y%m%d%H%M%S').zip"
+output_zip="/tmp/App_Connector_Journal_and_pcap-$(date +'%Y%m%d%H%M%S').zip"
   # Check if both files exist before zipping
 if [ -f "$output_file" ] && [ -f "$output_file2" ]; then
   # Zip the two files into the output zip archive
