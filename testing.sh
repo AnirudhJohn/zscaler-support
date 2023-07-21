@@ -3,6 +3,10 @@
 # Function to display the main menu
 function display_menu() {
   clear
+  echo "This is a standalone App Connector Troubleshooting Script"
+  echo "Created and managed by Anirudh"
+  
+  
   echo "Main Menu"
   echo "1. Show App Connector status"
   echo "2. Reprovision App Connector"
@@ -183,6 +187,8 @@ echo "Created and managed by Anirudh"
 echo "Dependency packages: zip"
 
 yum install zip -y &>/dev/null
+
+sleep 2
 
 # Main script
 while true; do
