@@ -184,6 +184,9 @@ while true; do
     5)
       task5
       ;;
+    6)
+      task6
+      ;;
     *)
       echo "Invalid choice. Please try again."
       ;;
