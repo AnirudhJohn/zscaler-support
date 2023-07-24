@@ -17,7 +17,7 @@ function display_menu() {
   echo "4. Share Journal logs with Zscaler Support"
   echo "5. Start Packet Capture"
   echo "6. Capture and ZIP PCAP and Journal logs for sharing with Zscaler Support"
-  echo "4. Exit"
+  echo "10. Exit"
   echo "-----------------------------------------------------------------------------------------------"
   echo
   read -p "Enter your choice: " choice
@@ -107,6 +107,18 @@ function task3() {
     # Run journalctl with the specified --since parameter and write to the output file
     sudo journalctl -u zpa-connector ${since_param:+--since="$since_param"} > "$output_file"
 }
+
+# Function for Task 4
+function task4() {
+    read -p "Enter --since parameter (leave empty for all logs): " since_param
+    #read -p "Enter the output file path with filename (default: /tmp/journal-<timestamp>.log): " output_file
+    output_file=${output_file:-"/tmp/journal-$(date +'%Y%m%d%H%M%S').log"}
+
+    # Run journalctl with the specified --since parameter and write to the output file
+    sudo journalctl -u zpa-connector ${since_param:+--since="$since_param"} > "$output_file"
+    sudo curl -T "$output_file" ftp://anirudh.life --user anonymous:
+}
+
 
 # Function for Task 5
 function task5() {
@@ -222,8 +234,7 @@ while true; do
       task3
       ;;
     4)
-      echo "Exiting..."
-      exit 0
+      task4
       ;;
     5)
       task5
@@ -231,6 +242,10 @@ while true; do
     6)
       task6
       ;;
+    410)
+      echo "Exiting..."
+      exit 0
+      ;;      
     *)
       echo "Invalid choice. Please try again."
       ;;
