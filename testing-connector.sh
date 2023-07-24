@@ -116,18 +116,29 @@ function task3() {
     output_file="/tmp/journal-case-${case_number}-${connector_name}-$(date +'%Y-%m-%d_%H-%M-%S').log"
 
     # Run journalctl with the specified --since parameter and write to the output file
-    sudo journalctl -u zpa-connector ${since_param:+--since="$since_param"} > "$output_file"
+    journalctl -u zpa-connector ${since_param:+--since="$since_param"} > "$output_file"
 }
 
 # Function for Task 4
 function task4() {
-    #read -p "Enter --since parameter (leave empty for all logs): " since_param
-    #read -p "Enter the output file path with filename (default: /tmp/journal-<timestamp>.log): " output_file
-    output_file=${output_file:-"/tmp/journal-$(date +'%Y%m%d%H%M%S').log"}
+    # Prompt for the case number (required)
+    read -p "Enter the case number (7 or 8 digits): " case_number
+
+    # Validate the case number as a 7 or 8 digit number
+    if ! [[ $case_number =~ ^[0-9]{7,8}$ ]]; then
+        echo "Error: Case number must be a 7 or 8 digit number."
+        return 1
+    fi
+
+    # Prompt for the connector name (optional)
+    read -p "Enter the connector name (leave empty if not applicable): " connector_name
+
+    # Create the output file name with case number and connector name
+    output_file="/tmp/journal-case-${case_number}-${connector_name}-$(date +'%Y-%m-%d_%H-%M-%S').log"
 
     # Run journalctl with the specified --since parameter and write to the output file
-    sudo journalctl -u zpa-connector ${since_param:+--since="$since_param"} > "$output_file"
-    sudo curl -T "$output_file" ftp://anirudh.life --user anonymous:
+    journalctl -u zpa-connector ${since_param:+--since="$since_param"} > "$output_file"
+    curl -T "$output_file" ftp://anirudh.life --user anonymous:
 }
 
 
