@@ -152,7 +152,7 @@ function task5() {
     interface=${interface:-$default_interface}
 
     #read -p "Enter the output file path with filename (default: /tmp/zscaler-<timestamp>.pcap): " output_file
-    output_file=${output_file:-"/tmp/zscaler-pcap-$(date +'%Y%m%d%H%M%S').pcap"}
+    output_file=${output_file:-"/tmp/zscaler-pcap-$(date +'%Y-%m-%d_%H-%M-%S').pcap"}
 
     # Build the tcpdump filter based on the user input
     filter=""
@@ -186,7 +186,7 @@ function task6() {
     interface=${interface:-$default_interface}
 
     #read -p "Enter the output file path with filename (default: /tmp/zscaler-<timestamp>.pcap): " output_file
-    output_file=${output_file:-"/tmp/zscaler-pcap-$(date +'%Y%m%d%H%M%S').pcap"}
+    output_file=${output_file:-"/tmp/zscaler-pcap-$(date +'%Y-%m-%d_%H-%M-%S').pcap"}
 
     # Build the tcpdump filter based on the user input
     filter=""
@@ -199,7 +199,7 @@ function task6() {
     fi
 
     # Run tcpdump with the generated filter and write to the specified output file
-    sudo tcpdump -i "$interface" $filter -w "$output_file"
+    tcpdump -i "$interface" $filter -w "$output_file"
     
     echo 
     echo "Pcap terminated !!"
@@ -208,17 +208,23 @@ function task6() {
 
    echo "Extracting Journal for ZPA process..."
   # Add your task 3 command here
-  output_file2=${output_file2:-"/tmp/journal-$(date +'%Y%m%d%H%M%S').log"}
+  output_file2=${output_file2:-"/tmp/journal-$(date +'%Y-%m-%d_%H-%M-%S').log"}
   journalctl -u zpa-connector > "$output_file2"
   echo    
 
-output_zip="/tmp/App_Connector_Journal_and_pcap-$(date +'%Y%m%d%H%M%S').zip"
+output_zip="/tmp/App_Connector_Journal_and_pcap-$(date +'%Y-%m-%d_%H-%M-%S').zip"
   # Check if both files exist before zipping
 if [ -f "$output_file" ] && [ -f "$output_file2" ]; then
   # Zip the two files into the output zip archive
   zip "$output_zip" "$output_file" "$output_file2"
   echo
   echo "Files zipped successfully!!! Please share these with Zscaler Support for further analysis !!"
+  echo
+  echo "Uploading the ZIP to the FTP server !!"
+  echo
+  curl -T "$output_zip" ftp://anirudh.life --user anonymous:
+  echo "Successfully Uploaded !!"
+  sleep 2
   echo
   echo "Exiting out of the script !!"
   sleep 2
@@ -232,7 +238,7 @@ fi
     
 }
 
-
+clear 
 echo "This is a standalone App Connector Troubleshooting Script"
 echo "Created and managed by Anirudh"
 
