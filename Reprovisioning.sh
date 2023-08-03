@@ -22,9 +22,12 @@ echo "This is the entered key: "
 echo
 echo $provision_key
 
-read -p "Do you wanna proceed (Might cause Damage if entered wrong key !!) Yes/No: " confirm
+echo "Do you wanna proceed (Might cause Damage if entered wrong key !!) " 
+echo
+read -p " Y/N: " confirm
 
-if [ "$confirm" = "$yes" ];then
+
+if [[ "$confirm" =~ ^[Yy]$ ]];then
 
 # Stop the zpa process
 echo
